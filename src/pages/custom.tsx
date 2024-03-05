@@ -88,8 +88,10 @@ const CustomPage = () => {
                                                         fetch(backendShareEndpoint + '/custom-step2?claims='+claims_form+'&sub='+subject_did+'&state='+socket.id);
                                                         event.preventDefault();
                                                     }}>
-                                <label>
-                                    Claims:
+                                <label htmlFor="claims">
+                                    Claims - example: &#123;"name":"Jay Jay Mirandis", "salt":"1983446",
+                                    "email":"torotori@japan.mail.com",
+                                    "overseaBank":"did:ev:bmM8apgHQD8cPbwNsMSJKqkYRCDYhkK55uxR9", "HikkyUser":"osoblack"&#125;:
                                     <textarea name="claims" id="claims" rows={5} cols={50} value={claims_form} onChange={ (event) => {
                                         setClaims(event.target.value);
                                     } }/>

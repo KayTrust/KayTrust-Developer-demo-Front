@@ -17,23 +17,25 @@ const AskForSharePage = () => {
 
     React.useEffect(() => {
         socket.on('connect', () => {
-            const url = new URL(host);
-            url.searchParams.append('redirect_uri', backendShareEndpoint + '/ask-for-share');
-            url.searchParams.append('title', 'Polaris');
-            url.searchParams.append('description', 'Polaris - medical certificate');
-            url.searchParams.append('claims', 'name');
-            url.searchParams.append('client_id', clientId);
-            url.searchParams.append('state', socket.id);
-            const newQRValue = url.toString();
-            setQRValue(newQRValue);
+            console.log("server connected.");
         });
-
+        
+        const url = new URL(host);
+        url.searchParams.append('redirect_uri', backendShareEndpoint + '/ask-for-share');
+        url.searchParams.append('title', 'Polaris');
+        url.searchParams.append('description', 'Polaris - medical certificate');
+        url.searchParams.append('claims', 'name');
+        url.searchParams.append('client_id', clientId);
+        url.searchParams.append('state', socket.id);
+        const newQRValue = url.toString();
+        setQRValue(newQRValue);
+        console.log(newQRValue);
         socket.on('disconnect', () => { });
 
         socket.on('shared-identity-ask-client', (args) => {
             setName(args);
             setStep(2);
-            console.log("name: "+ name);
+            console.log("name: " + name);
         });
 
         return () => {
@@ -42,16 +44,16 @@ const AskForSharePage = () => {
             socket.off('shared-identity-ask-client');
         };
     }, []);
-    
+
     return (
         <div className={classes.container}>
             <div className={classes.columnLeft}>
-                <img className={classes.logo} src={PolarisLogo} alt="logo de Polaris"/>
+                <img className={classes.logo} src={PolarisLogo} alt="logo de Polaris" />
             </div>
             <div className={classes.columnRigth}>
                 {
                     step === 1 ?
-                    <h5>Hi Dr. {name},</h5>
+                    <h5>Hi Dr.</h5>
                     :
                     <h1>Hi Dr. {name},</h1>
                 }
@@ -61,10 +63,15 @@ const AskForSharePage = () => {
                 }
                 <div className={classes.content}>
                     We value your work at Polaris. To be able to access external systems, you will sometimes be requested to authenticate as a doctor.
-                    <br/>
+                    <br />
                     {
                         step === 1 ?
-                        <h3>Please scan the QR code below to share your digital identity and your Names with us, so that we can verify your information.</h3>
+                        <div>
+                            <h3>Please scan the QR code below to share your digital identity and your Names with us, so that we can verify your information.</h3>
+                            <label> 
+                                <input type="checkbox" name="check_vp" id="check_vp" value="check_vp" />Check to verify VP sealed
+                            </label>        
+                        </div>
                         :
                         <h3>Thank you, your verifiable credential is OK and verified! Developer note: From here you can do anything.</h3>
                     }
@@ -72,10 +79,10 @@ const AskForSharePage = () => {
                 <div className={classes.qr}>
                     {
                         step === 2 &&
-                        <span style={{fontSize: '3rem', color: '#21C0AC'}}><i className="fa fa-check-circle" aria-hidden="true"></i></span>
-                     }
-                    <br/>
-                    <QRCode value={qrValue} fgColor={step === 1 ? '##21C0AC' : '#FFFFFF'}/>
+                        <span style={{ fontSize: '3rem', color: '#21C0AC' }}><i className="fa fa-check-circle" aria-hidden="true"></i></span>
+                    }
+                    <br />
+                    <QRCode value={qrValue} fgColor={step === 1 ? '##21C0AC' : '#FFFFFF'} />
                 </div>
             </div>
         </div>
@@ -88,7 +95,8 @@ const useStyles = createUseStyles({
         flexDirection: 'row',
         height: '100%',
         justifyContent: 'center',
-        color: '#1A215D'
+        color: '#1A215D',
+        backgroundColor: '#eee8aa'
     },
     logo: {
         width: '250px',
