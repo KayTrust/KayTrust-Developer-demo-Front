@@ -18,9 +18,9 @@ const ProviderPage = () => {
     const [urlValue, setUrl] = React.useState('');
     
     React.useEffect(() => {
-        const url = new URL(host + 'share');
 
         socket.on('connect', () => {
+            const url = new URL(host);
             console.log("server connected to " + process.env.REACT_APP_WS_SERVER as string + ".");
             console.log("Socket ID: " + socket.id);
             url.searchParams.append('redirect_uri', backendShareEndpoint + '/provider-step1');

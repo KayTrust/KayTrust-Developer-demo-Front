@@ -17,19 +17,19 @@ const AskForSharePage = () => {
 
     React.useEffect(() => {
         socket.on('connect', () => {
+            const url = new URL(host);
             console.log("server connected.");
+            url.searchParams.append('redirect_uri', backendShareEndpoint + '/ask-for-share');
+            url.searchParams.append('title', 'Polaris');
+            url.searchParams.append('description', 'Polaris - medical certificate');
+            url.searchParams.append('claims', 'name');
+            url.searchParams.append('client_id', clientId);
+            url.searchParams.append('state', socket.id);
+            const newQRValue = url.toString();
+            setQRValue(newQRValue);
+            console.log(newQRValue);
         });
         
-        const url = new URL(host);
-        url.searchParams.append('redirect_uri', backendShareEndpoint + '/ask-for-share');
-        url.searchParams.append('title', 'Polaris');
-        url.searchParams.append('description', 'Polaris - medical certificate');
-        url.searchParams.append('claims', 'name');
-        url.searchParams.append('client_id', clientId);
-        url.searchParams.append('state', socket.id);
-        const newQRValue = url.toString();
-        setQRValue(newQRValue);
-        console.log(newQRValue);
         socket.on('disconnect', () => { });
 
         socket.on('shared-identity-ask-client', (args) => {
