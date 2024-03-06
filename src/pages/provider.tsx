@@ -18,24 +18,27 @@ const ProviderPage = () => {
     const [urlValue, setUrl] = React.useState('');
     
     React.useEffect(() => {
+        const url = new URL(host + 'share');
+
         socket.on('connect', () => {
             console.log("server connected to " + process.env.REACT_APP_WS_SERVER as string + ".");
             console.log("Socket ID: " + socket.id);
+            url.searchParams.append('redirect_uri', backendShareEndpoint + '/provider-step1');
+            url.searchParams.append('title', 'Generar VC customizada desde provider');
+            url.searchParams.append('description', 'Emitir una credencial desde el provider con datos custom para pruebas de visualización');
+            //Si no llegan claims a solicitar mandas tu DID para saber quien erer.
+            //url.searchParams.append('claims', 'name');
+            url.searchParams.append('client_id', clientId);
+            url.searchParams.append('state', socket.id);
+            const newQRValue = url.toString();
+            console.log("redirect_uri", backendShareEndpoint + '/provider-step1');
+            console.log("QR-CODE", newQRValue);
+            setQRValue(newQRValue);
+            setUrl(newQRValue)
         });
 
-        const url = new URL(host + 'share');
-        url.searchParams.append('redirect_uri', backendShareEndpoint + '/provider-step1');
-        url.searchParams.append('title', 'Generar VC customizada desde provider');
-        url.searchParams.append('description', 'Emitir una credencial desde el provider con datos custom para pruebas de visualización');
-        //Si no llegan claims a solicitar mandas tu DID para saber quien erer.
-        //url.searchParams.append('claims', 'name');
-        url.searchParams.append('client_id', clientId);
-        url.searchParams.append('state', socket.id);
-        const newQRValue = url.toString();
-        console.log("redirect_uri", backendShareEndpoint + '/provider-step1');
-        console.log("QR-CODE", newQRValue);
-        setQRValue(newQRValue);
-        setUrl(newQRValue)
+        
+        
 
         socket.on('disconnect', () => { });
 
