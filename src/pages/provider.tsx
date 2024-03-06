@@ -39,6 +39,7 @@ const ProviderPage = () => {
         socket.on('disconnect', () => { });
 
         socket.on('shared-identity-provider-client', (args) => {
+            console.log("Receiving shared-identity-provider-client");
             setSubject(args);
             setStep(2);
         });
