@@ -19,7 +19,7 @@ const ProviderPage = () => {
     
     React.useEffect(() => {
         socket.on('connect', () => {
-            console.log("server connected.");
+            console.log("server connected to " + process.env.REACT_APP_WS_SERVER as string + ".");
         });
 
         const url = new URL(host + 'share');
